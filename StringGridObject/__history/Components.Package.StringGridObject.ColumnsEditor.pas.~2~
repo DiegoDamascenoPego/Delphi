@@ -1,0 +1,38 @@
+unit Components.Package.StringGridObject.ColumnsEditor;
+
+interface
+type
+  TColunmsEditor = class(TComponentEditor)
+    function GetVerbCount: Integer; override;
+    function GetVerb(Index: Integer): string; override;
+    procedure ExecuteVerb(Index: Integer); override;
+    procedure Edit; override;
+  end;
+
+implementation
+
+{ TColunmsEditor }
+
+procedure TColunmsEditor.Edit;
+begin
+  inherited;
+
+end;
+
+procedure TColunmsEditor.ExecuteVerb(Index: Integer);
+begin
+  inherited;
+
+end;
+
+function TColunmsEditor.GetVerb(Index: Integer): string;
+begin
+
+end;
+
+function TColunmsEditor.GetVerbCount: Integer;
+begin
+
+end;
+
+end.

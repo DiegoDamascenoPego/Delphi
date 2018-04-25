@@ -1,0 +1,65 @@
+unit Components.Package.StringGridObject.ColumnsEditor;
+
+interface
+
+uses
+  DesignEditors;
+
+type
+  TColunmsEditor = class(TComponentEditor)
+    function GetVerbCount: Integer; override;
+    function GetVerb(Index: Integer): string; override;
+    procedure ExecuteVerb(Index: Integer); override;
+    procedure Edit; override;
+  end;
+
+implementation
+
+uses
+  DesignIntf, StringGridObject, System.Classes, ColEdit;
+
+{ TColunmsEditor }
+
+procedure TColunmsEditor.Edit;
+begin
+  inherited;
+
+end;
+
+procedure TColunmsEditor.ExecuteVerb(Index: Integer);
+var
+  context: TRttiContext;
+  Types: TRttiType;
+  prop: TRttiProperty;
+  Detail: TColumnDetail;
+  ColumnsCreate: IColumnsGenerate;
+begin
+  inherited;
+  case Index of
+    0:
+      ShowCollectionEditor(Designer, Component, TStringGridObject(Component).FColumns, 'Columns');
+    1:
+      begin
+        ColumnsCreate := TGeneratorColumn.Create;
+        ColumnsCreate.GenerateColumns(TStringGridObject(Component).FColumns, TGenericObject.Instanciar(TStringGridObject(Component).ColumnObject).ClassType);
+      end;
+  end;
+
+end;
+
+function TColunmsEditor.GetVerb(Index: Integer): string;
+begin
+  case Index of
+    0:
+      Result := 'Create/Edit Colunms';
+    1:
+      Result := 'Generate Colunms';
+  end;
+end;
+
+function TColunmsEditor.GetVerbCount: Integer;
+begin
+  Result := 2
+end;
+
+end.

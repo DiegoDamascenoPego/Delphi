@@ -1,0 +1,46 @@
+package TStringGridObject;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS OFF}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO OFF}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE RELEASE}
+{$ENDIF IMPLICITBUILDING}
+{$DESIGNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  vcl,
+  bindengine,
+  designide,
+  dclstd;
+
+contains
+  Components.Package.StringGridObject.uStringGrid in 'Components.Package.StringGridObject.uStringGrid.pas',
+  Components.Package.Utils.uObject in 'Components.Package.Utils.uObject.pas',
+  UPessoa in 'C:\Users\Diego\Documents\Embarcadero\Studio\Projects\UPessoa.pas',
+  Components.Package.StringGridObject.uEditor in 'Components.Package.StringGridObject.uEditor.pas',
+  Components.Package.StringGridObject.uColumnsEditor in 'Components.Package.StringGridObject.uColumnsEditor.pas',
+  Components.Package.StringGridObject.IColumnsGen in 'Components.Package.StringGridObject.IColumnsGen.pas';
+
+end.

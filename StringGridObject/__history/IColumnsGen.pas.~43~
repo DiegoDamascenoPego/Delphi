@@ -1,0 +1,62 @@
+unit IColumnsGen;
+
+interface
+
+uses
+  StringGridObject;
+
+type
+  IColumnsGenerate = Interface
+    ['{A017C52C-475B-40A5-8164-B48C6D7429E9}']
+
+    procedure GenerateColumns(Column: TColumn; obj: TObject);
+
+  End;
+
+type
+  TGeneratorColumn = class(TinterfacedObject, IColumnsGenerate)
+  private
+    { private declarations }
+  protected
+    { protected declarations }
+  public
+    procedure GenerateColumns(Column: TColumn;  obj: TObject);
+    { public declarations }
+
+  published
+    { published declarations }
+  end;
+
+implementation
+
+uses
+  System.Rtti;
+
+{ TGeneratorColumn }
+
+{ TGeneratorColumn<T> }
+
+procedure TGeneratorColumnGenerateColumns(Column: TColumn;  obj: TObject);
+var
+  context: TRttiContext;
+  types: TRttiType;
+  prop: TRttiProperty;
+  Detail: TColumnDetail;
+begin
+  context := TRttiContext.Create;
+  try
+    types := context.GetType(obj);
+    Column.Clear;
+    for prop in types.GetProperties do
+    begin
+      Detail := TColumnDetail.Create(Column);
+      Detail.ColTitle := prop.Name;
+      Detail.Size := 150;
+      Detail.Changed(True);
+    end;
+  finally
+
+  end;
+end;
+
+end.

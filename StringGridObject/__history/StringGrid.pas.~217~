@@ -1,0 +1,1062 @@
+﻿unit StringGrid;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, Vcl.Controls,
+  System.Generics.Collections, System.Rtti, System.Types,
+  Vcl.Grids, Vcl.StdCtrls, Vcl.Graphics, DesignEditors;
+
+type
+  TBeginEditEvent = procedure(Sender: TObject; ACol, ARow: Longint;
+    var CanEdit: Boolean) of object;
+  TEndEditEvent = procedure(Sender: TObject; ACol, ARow: Longint) of object;
+  TValidateEditEvent = procedure(Sender: TObject; ACol, ARow: Longint;
+    const Value: string; var CanUpDate: Boolean) of object;
+  TEditEvent = procedure(Sender: TObject; ACol, ARow: Longint;
+    var Value: string) of object;
+
+type
+  TColumn = class;
+  TColumnDetail = class;
+
+TCellsType = (ctNone, ctInteger, ctNumeric, ctFloat, ctDate, ctString, ctBoolean);
+
+    TColumnDetail = class(TCollectionItem)
+  private
+    FColTitle: String;
+    FColType: TCellsType;
+    FCellsAlignment: TAlignment;
+    FFieldName: string;
+    FCanSelect: Boolean;
+    FSize: Integer;
+    FisRequered: Boolean;
+    FMaxLen: integer;
+    FDecimal: integer;
+    procedure SetCanSelect(const Value: Boolean);
+    procedure SetCellsAlignment(const Value: TAlignment);
+    procedure SetColTitle(const Value: String);
+    procedure SetColType(const Value: TCellsType);
+    procedure SetDecimal(const Value: integer);
+    procedure SetFieldName(const Value: string);
+    procedure SetisRequered(const Value: Boolean);
+    procedure SetMaxLen(const Value: integer);
+    procedure SetSize(const Value: Integer);
+  protected
+    FColumn: TColumn;
+    procedure SetIndex(Value: Integer); override;
+    function GetDisplayName: string; override;
+    procedure Assign(Source: TPersistent); override;
+  public
+    constructor Create(Collection: TCollection); override;
+    destructor Destroy; override;
+
+  published
+    property ColTitle: String read FColTitle write SetColTitle;
+    property ColType: TCellsType read FColType write SetColType;
+    property FieldName: string read FFieldName write SetFieldName;
+    property Decimal: integer read FDecimal write SetDecimal;
+    property MaxLen: integer read FMaxLen write SetMaxLen;
+    property CanSelect: Boolean read FCanSelect write SetCanSelect;
+    property isRequered: Boolean read FisRequered write SetisRequered;
+    property Size: Integer read FSize write SetSize;
+    property Column: TColumn read FColumn write FColumn stored True;
+    property CellsAlignment: TAlignment read FCellsAlignment write SetCellsAlignment;
+
+  end;
+
+
+  TColumn = class(TCollection)
+  private
+    FComp: TComponent;
+  protected
+    function GetItem(Index: Integer): TColumnDetail;
+    procedure SetItem(Index: Integer; Value: TColumnDetail);
+    procedure Update(Item: TCollectionItem); override;
+  public
+    function Add: TColumnDetail;
+    constructor Create(AOwner: TComponent);
+    function GetOwner: TPersistent; override;
+    property Items[Index: Integer]: TColumnDetail read GetItem write SetItem;
+  end;
+
+
+
+type
+  TColunmsEditor = class(TComponentEditor)
+    function GetVerbCount: integer; override;
+    function GetVerb(Index: integer): string; override;
+    procedure ExecuteVerb(Index: integer); override;
+    procedure Edit; override;
+  end;
+
+type
+  TStringEditor = class(TInplaceEdit)
+
+  private
+    function UpDateObject: Boolean;
+    { private declarations }
+  protected
+    procedure KeyDown(var Key: Word; Shift: TShiftState); override;
+    procedure KeyPress(var Key: Char); override;
+    procedure UpdateContents; override;
+    function Update: Boolean;
+    { protected declarations }
+  public
+    constructor Create(AOwner: TComponent); override;
+    procedure EditorExit(Sender: TObject);
+    function ForcarUpdate: Boolean;
+    { public declarations }
+
+  published
+    { published declarations }
+
+  end;
+
+type
+  TStringGridObject = class(TStringGrid)
+  private
+    FRow: integer;
+    FCol: integer;
+    FCanEdit: Boolean;
+    FOnBeginEdit: TBeginEditEvent;
+    FOnValidateEdit: TValidateEditEvent;
+    FOnEndEdit: TEndEditEvent;
+    FOnEditEvent: TEditEvent;
+    FColumns: TColumn;
+    function RetornaValor(Value: TValue; tipo: TCellsType): string; overload;
+    function RetornaValor(Value: String; tipo: TCellsType): TValue; overload;
+    procedure SetOnBeginEdit(const Value: TBeginEditEvent);
+    procedure SetOnValidateEdit(const Value: TValidateEditEvent);
+    procedure SetOnEndEdit(const Value: TEndEditEvent);
+    function default(tipo: string): TValue;
+    procedure SetOnEditEvent(const Value: TEditEvent);
+    procedure LoadColumns;
+    procedure SetColumns(const Value: TColumn);
+
+    { Private declarations }
+  protected
+    function CreateEditor: TInplaceEdit; override;
+    procedure KeyPress(var Key: Char); override;
+    procedure KeyDown(var Key: Word; Shift: TShiftState); override;
+    procedure Loaded; override;
+    procedure Notification(AComponent: TComponent;
+      Operation: TOperation); override;
+    procedure Update; override;
+    procedure DrawCell(ACol, ARow: Longint; ARect: TRect;
+      AState: TGridDrawState); override;
+    function SelectCell(ACol, ARow: Longint): Boolean; override;
+    function GetEditMask(ACol, ARow: Longint): string; override;
+    procedure UpdateObjectRow(ACol, ARow: Longint; const Value: string);
+    function CanEditModify: Boolean; override;
+    procedure ClearGrid;
+
+    { Protected declarations }
+  public
+    FOldValue: string;
+    FEditando: Boolean;
+    constructor Create(AOwner: TComponent); Override;
+    destructor Destroy; override;
+    procedure SetGridFocus(Linha, Coluna: integer);
+    procedure AtualizarGrid<T: class>(lista: TObjectList<T>);
+    procedure Refresh;
+    function RetornaListaObjetoGrid<T: class>: TObjectList<T>;
+    function RetornaObjeto<T: class>(ARow: integer): T; overload;
+    function RetornaObjeto<T: class>: T; overload;
+    procedure CancelarEdicao;
+    function ForcarEdicao: Boolean;
+    procedure AlignmentCenter(lCanvas: TCanvas; ACol, ARow: integer;
+      ARect: TRect);
+    procedure AlignmentRight(lCanvas: TCanvas; ACol, ARow: integer;
+      ARect: TRect);
+    procedure AlignmentLeft(lCanvas: TCanvas; ACol, ARow: integer;
+      ARect: TRect);
+    procedure DefaultAlignmentColums(var lCanvas: TCanvas; ACol, ARow: integer;
+      ARect: TRect);
+    procedure CellsFontColor(var lCanvas: TCanvas; FontColor: integer;
+      State: TGridDrawState; ARect: TRect; FontColorFocus: integer = 0);
+    procedure CellsImage(var lCanvas: TCanvas; ACol, ARow: integer;
+      ARect: TRect; Imagem: TGraphic);
+    function SelecionaRegistro(const Value, ColName: string): Boolean;
+    procedure GridFocus(Linha, Coluna: integer);
+    { Public declarations }
+  published
+    property Columns: TColumn read FColumns write SetColumns;
+    property OnBeginEdit: TBeginEditEvent read FOnBeginEdit
+      write SetOnBeginEdit;
+    property OnValidateEdit: TValidateEditEvent read FOnValidateEdit
+      write SetOnValidateEdit;
+    property OnEndEdit: TEndEditEvent read FOnEndEdit write SetOnEndEdit;
+    property OnEditEvent: TEditEvent read FOnEditEvent write SetOnEditEvent;
+    { Published declarations }
+  end;
+
+procedure Register;
+
+implementation
+
+uses
+  Winapi.Messages, Winapi.Windows, Vcl.Dialogs, Vcl.Forms,
+  BindingGraphViewNodes, DesignIntf;
+
+procedure Register;
+begin
+  RegisterComponents('Componentes', [TStringGridObject]);
+  RegisterComponentEditor(TStringGridObject, TColunmsEditor);
+end;
+
+{ TDados }
+
+{ TStringGridMeu }
+
+procedure TStringGridObject.AlignmentCenter(lCanvas: TCanvas;
+  ACol, ARow: integer; ARect: TRect);
+begin
+  lCanvas.TextRect(ARect,
+    (ARect.Left + ARect.Right - Canvas.TextWidth(Cells[ACol, ARow])) div 2,
+    ARect.Top + 2, Cells[ACol, ARow]);
+end;
+
+procedure TStringGridObject.AlignmentLeft(lCanvas: TCanvas; ACol, ARow: integer;
+  ARect: TRect);
+begin
+  lCanvas.TextRect(ARect, ARect.Left + 2, ARect.Top + 2, Cells[ACol, ARow]);
+end;
+
+procedure TStringGridObject.AlignmentRight(lCanvas: TCanvas;
+  ACol, ARow: integer; ARect: TRect);
+begin
+  lCanvas.TextRect(ARect, ARect.Right - 2 - Canvas.TextWidth(Cells[ACol, ARow]),
+    ARect.Top + 2, Cells[ACol, ARow]);
+end;
+
+procedure TStringGridObject.AtualizarGrid<T>(lista: TObjectList<T>);
+var
+  registro: TObject;
+  Index, I: integer;
+  Ctx: TRttiContext;
+  TipoRtti: TRttiType;
+  PropRtti: TRttiProperty;
+begin
+  ClearGrid;
+  if lista.Count > 0 then
+  begin
+    index := 1;
+    Self.RowCount := lista.Count + 1;
+    for registro in lista do
+    begin
+      Self.Objects[0, index] := registro;
+      try
+        Ctx := TRttiContext.Create;
+        TipoRtti := Ctx.GetType(registro.ClassInfo);
+        for I := 0 to Pred(Columns.Count) do
+        begin
+          try
+            PropRtti := TipoRtti.GetProperty(Columns.Items[I].FieldName);
+            Self.Cells[I, index] := RetornaValor(PropRtti.GetValue(registro),
+              Columns.Items[I].ColType);
+          except
+            // campo não encontrado
+          end;
+        end;
+      finally
+        Ctx.Free;
+        TipoRtti.Free;
+      end;
+      Inc(index);
+    end;
+  end;
+
+end;
+
+procedure TStringGridObject.CancelarEdicao;
+begin
+  if Self.EditorMode then
+  begin
+    if FOldValue <> '?' then
+    begin
+      Self.Cells[Self.Col, Self.Row] := FOldValue;
+
+    end;
+    Self.FOldValue := '?';
+    Self.EditorMode := false;
+  end;
+end;
+
+function TStringGridObject.CanEditModify: Boolean;
+var
+  Value: Boolean;
+begin
+  Value := True;
+
+  if Assigned(Self.OnBeginEdit) then
+    Self.OnBeginEdit(Self, Self.Col, Self.Row, Value);
+
+  Result := Value;
+end;
+
+procedure TStringGridObject.LoadColumns;
+var
+  I: integer;
+begin
+  try
+    if Columns.Count > 0 then
+    begin
+      Self.ColCount := Columns.Count;
+      for I := 0 to Pred(Columns.Count) do
+      begin
+        Self.Cells[I, 0] := Columns.Items[I].ColTitle;
+        Self.ColWidths[I] := Columns.Items[I].Size;
+      end;
+    end;
+  except
+    on E: Exception do
+    begin
+      // escrever log
+    end;
+  end;
+end;
+
+procedure TStringGridObject.CellsFontColor(var lCanvas: TCanvas;
+  FontColor: integer; State: TGridDrawState; ARect: TRect;
+  FontColorFocus: integer = 0);
+begin
+  lCanvas.Font.Size := Self.Font.Size;
+
+  if gdFixed in State then
+  begin
+    { Cor do fonte e de fundo para linhas e colunas fixas }
+    lCanvas.Font.Color := FontColor;
+    lCanvas.Brush.Color := Self.FixedColor;
+  end
+  else if gdSelected in State then
+  begin
+    { Cor do fonte e de fundo para linhas e colunas selecionadas }
+    if FontColorFocus = 0 then
+      lCanvas.Font.Color := Self.Font.Color
+    else
+      lCanvas.Font.Color := FontColorFocus;
+
+    lCanvas.Brush.Color := $9AF0FF
+  end
+  else
+  begin
+    lCanvas.Font.Color := FontColor;
+    lCanvas.Brush.Color := Self.Color;
+  end;
+  { Preenche com a cor de fundo }
+  lCanvas.FillRect(ARect);
+end;
+
+procedure TStringGridObject.CellsImage(var lCanvas: TCanvas;
+  ACol, ARow: integer; ARect: TRect; Imagem: TGraphic);
+var
+  yCalc: integer;
+begin
+  { Calcula posição para centralizar o texto na vertical }
+  yCalc := lCanvas.TextHeight(Cells[ACol, ARow]) div 2;
+  yCalc := ARect.Top + (ARect.Bottom - ARect.Top - yCalc) div 2;
+  lCanvas.Draw(ARect.Left + 20, yCalc - 5, Imagem);
+end;
+
+constructor TStringGridObject.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Self.FColumns := TColumn.Create(Self);
+  Self.FixedCols := 0;
+  Self.FixedRows := 1;
+  Self.Font.Color := $0088471F;
+  Self.Font.Size := 9;
+  Self.Font.Name := 'Segoe UI';
+  Self.DefaultRowHeight := 20;
+  Self.FOldValue := '?';
+end;
+
+function TStringGridObject.CreateEditor: TInplaceEdit;
+begin
+  Result := TStringEditor.Create(Self);
+end;
+
+function TStringGridObject.default(tipo: string): TValue;
+begin
+  if tipo = 'string' then
+    Result := EmptyStr
+  else if tipo = 'Integer' then
+    Result := 0
+  else if tipo = 'Double' then
+    Result := 0.00
+  else
+  begin
+    Result := nil;
+  end;
+end;
+
+procedure TStringGridObject.DefaultAlignmentColums(var lCanvas: TCanvas;
+  ACol, ARow: integer; ARect: TRect);
+begin
+  if Assigned(Self.Columns) then
+  begin
+    if Self.Columns.Count > 0 then
+    begin
+      if ARow = 0 then
+      begin
+        Self.AlignmentCenter(lCanvas, ACol, ARow, ARect);
+      end
+      else
+      begin
+        case Self.Columns.Items[ACol].CellsAlignment of
+          taLeftJustify:
+            begin
+              Self.AlignmentLeft(lCanvas, ACol, ARow, ARect);
+            end;
+          taRightJustify:
+            begin
+              Self.AlignmentRight(lCanvas, ACol, ARow, ARect);
+            end;
+          taCenter:
+            begin
+              Self.AlignmentCenter(lCanvas, ACol, ARow, ARect);
+            end;
+        end;
+      end;
+    end;
+  end;
+end;
+
+destructor TStringGridObject.Destroy;
+begin
+  FColumns.Free;
+  FColumns := nil;
+  inherited;
+end;
+
+procedure TStringGridObject.DrawCell(ACol, ARow: integer; ARect: TRect;
+  AState: TGridDrawState);
+var
+  lCanvas: TCanvas;
+begin
+  if DefaultDrawing then
+  begin
+    lCanvas := Self.Canvas;
+
+    CellsFontColor(lCanvas, Self.Font.Color, AState, ARect);
+
+    DefaultAlignmentColums(lCanvas, ACol, ARow, ARect);
+  end
+  else
+    inherited DrawCell(ACol, ARow, ARect, AState);
+end;
+
+function TStringGridObject.ForcarEdicao: Boolean;
+begin
+  if Assigned(Self.InplaceEditor) then
+  begin
+    Result := TStringEditor(Self.InplaceEditor).ForcarUpdate;
+
+    if not Result then
+      Self.CancelarEdicao;
+  end
+  else
+  begin
+    Result := True;
+  end;
+end;
+
+function TStringGridObject.GetEditMask(ACol, ARow: integer): string;
+begin
+  inherited;
+
+end;
+
+procedure TStringGridObject.GridFocus(Linha, Coluna: integer);
+var
+  SRect: TGridRect;
+begin
+  if Linha < Self.RowCount then
+  begin
+    with Self do
+    begin
+      SetFocus;
+      Row := Linha;
+      Col := Coluna;
+      SRect.Top := Linha;
+      SRect.Left := Coluna;
+      SRect.Bottom := Linha;
+      SRect.Right := Coluna;
+      Selection := SRect;
+    end;
+  end;
+end;
+
+procedure TStringGridObject.Refresh;
+var
+  I, X: integer;
+  Ctx: TRttiContext;
+  TipoRtti: TRttiType;
+  PropRtti: TRttiProperty;
+begin
+  for I := 1 to Pred(Self.RowCount) do
+  begin
+    Ctx := TRttiContext.Create;
+    TipoRtti := Ctx.GetType(Self.Objects[0, I].ClassInfo);
+    for X := 0 to Pred(Columns.Count) do
+    begin
+      try
+        PropRtti := TipoRtti.GetProperty(Columns.Items[X].FieldName);
+        Self.SetEditText(X, I, RetornaValor(PropRtti.GetValue(Self.Objects[0, I]
+          ), Columns.Items[X].ColType));
+      except
+        // campo não encontrado
+      end;
+    end;
+  end;
+end;
+
+function TStringGridObject.RetornaListaObjetoGrid<T>: TObjectList<T>;
+var
+  I: integer;
+begin
+  Result := TObjectList<T>.Create;
+  for I := 0 to Pred(Self.RowCount) do
+  begin
+    if Self.Objects[0, I] is T then
+      Result.Add(T(Self.Objects[0, I]))
+  end;
+end;
+
+function TStringGridObject.RetornaObjeto<T>: T;
+begin
+  if Self.Objects[0, Self.Row] is T then
+    Result := Self.Objects[0, Self.Row] AS T
+  else
+    Result := nil;
+end;
+
+procedure TStringGridObject.KeyDown(var Key: Word; Shift: TShiftState);
+begin
+  if Key = VK_F2 then
+  begin
+    if Self.FCanEdit then
+      inherited;
+  end
+  else
+    inherited;
+
+end;
+
+procedure TStringGridObject.KeyPress(var Key: Char);
+begin
+  if Key = #27 then
+    SetGridFocus(Self.Row + 1, Self.Col)
+  else
+    inherited;
+end;
+
+procedure TStringGridObject.ClearGrid;
+var
+  I: integer;
+begin
+  with Self do
+    for I := 1 to RowCount - 1 do
+      Rows[I].Clear;
+end;
+
+procedure TStringGridObject.Loaded;
+begin
+  inherited Loaded;
+  LoadColumns;
+end;
+
+procedure TStringGridObject.Notification(AComponent: TComponent;
+  Operation: TOperation);
+begin
+  inherited Notification(AComponent, Operation);
+end;
+
+function TStringGridObject.RetornaObjeto<T>(ARow: integer): T;
+begin
+  if Self.Objects[0, ARow] is T then
+    Result := Self.Objects[0, ARow] AS T
+  else
+    Result := nil;
+end;
+
+function TStringGridObject.RetornaValor(Value: String;
+  tipo: TCellsType): TValue;
+begin
+  try
+    case tipo of
+      ctNone:
+        Result := TValue.FromVariant(Value);
+      ctInteger:
+        Result := TValue.FromVariant(StrToInt(Value));
+      ctNumeric:
+        Result := TValue.FromVariant(StrToCurr(Value));
+      ctFloat:
+        Result := TValue.FromVariant(StrToFloat(Value));
+      ctDate:
+        Result := TValue.FromVariant(StrToDate('dd/mm/yyyy'));
+      ctString:
+        Result := TValue.FromVariant(Value);
+    end;
+  except
+    Result := '';
+  end;
+end;
+
+function TStringGridObject.RetornaValor(Value: TValue;
+  tipo: TCellsType): string;
+begin
+  try
+    case tipo of
+      ctNone:
+        Result := Value.AsString;
+      ctInteger:
+        Result := IntToStr(Value.AsInteger);
+      ctNumeric:
+        Result := CurrToStr(Value.AsCurrency);
+      ctFloat:
+        Result := FloatToStr(Value.AsCurrency);
+      ctDate:
+        Result := FormatDateTime('dd/mm/yyyy', Value.AsType<TDateTime>);
+      ctString:
+        Result := Value.AsString;
+    end;
+  except
+    Result := '';
+  end;
+end;
+
+function TStringGridObject.SelecionaRegistro(const Value,
+  ColName: string): Boolean;
+var
+  I, indiceColuna: integer;
+  bRet: Boolean;
+begin
+  bRet := false;
+  indiceColuna := -1;
+  if Self.RowCount > 1 then
+  begin
+    for I := 0 to Pred(Self.Columns.Count) do
+    begin
+      if Self.Columns.Items[I].ColTitle = ColName then
+      begin
+        indiceColuna := I;
+        Break;
+      end;
+    end;
+
+    if indiceColuna < 0 then
+      raise Exception.Create('Coluna informada não encontrada na Grid.')
+    else
+    begin
+      for I := 0 to Pred(Self.RowCount) do
+      begin
+        if UpperCase(Self.Cells[indiceColuna, I]) = UpperCase(Value) then
+        begin
+          bRet := True;
+          Self.FocusCell(indiceColuna, I, True);
+          Break;
+        end;
+      end;
+    end;
+  end;
+  Result := bRet;
+end;
+
+function TStringGridObject.SelectCell(ACol, ARow: integer): Boolean;
+var
+  I: integer;
+begin
+  inherited SelectCell(ACol, ARow);
+  if not(goRowSelect in Self.Options) then
+  begin
+    // Registro pode ser Editado
+    if Self.Columns.Items[ACol].CanSelect then
+      Self.Options := Self.Options + [goEditing]
+    else
+      Self.Options := Self.Options - [goEditing];
+  end
+  else
+  begin
+    Self.Options := Self.Options - [goEditing];
+  end;
+
+  if Self.EditorMode then
+  begin
+    Self.CancelarEdicao;
+  end;
+end;
+
+procedure TStringGridObject.SetColumns(const Value: TColumn);
+begin
+  FColumns.Assign(Value);
+end;
+
+procedure TStringGridObject.Update;
+begin
+  inherited;
+
+end;
+
+procedure TStringGridObject.UpdateObjectRow(ACol, ARow: integer;
+  const Value: string);
+var
+  registro: TObject;
+  Ctx: TRttiContext;
+  TipoRtti: TRttiType;
+  PropRtti: TRttiProperty;
+  Valor: TValue;
+begin
+  registro := Self.Objects[0, ARow];
+  Ctx := TRttiContext.Create;
+  try
+    TipoRtti := Ctx.GetType(registro.ClassInfo);
+    PropRtti := TipoRtti.GetProperty(Self.Columns.Items[ACol].FieldName);
+    Valor := RetornaValor(Value, Self.Columns.Items[ACol].ColType);
+    PropRtti.SetValue(registro, Valor);
+  except
+    on E: Exception do
+    begin
+      try
+        Valor := default (PropRtti.PropertyType.ToString);
+        PropRtti.SetValue(registro, Valor);
+      except
+        on E: Exception do
+        begin
+          ShowMessage(E.Message);
+        end;
+      end;
+    end;
+  end;
+  Cells[ACol, ARow] := RetornaValor(Valor, Self.Columns.Items[ACol].ColType);
+
+  if Assigned(Self.OnEndEdit) then
+    Self.OnEndEdit(Self, ACol, ARow);
+
+  Self.EditorMode := false;
+  Self.FOldValue := '?'
+end;
+
+procedure TStringGridObject.SetGridFocus(Linha, Coluna: integer);
+var
+  SRect: TGridRect;
+begin
+  if Linha < Self.RowCount then
+  begin
+    with Self do
+    begin
+      SetFocus;
+      // Row := Linha;
+      // Col := Coluna;
+      SRect.Top := Linha;
+      SRect.Left := Coluna;
+      SRect.Bottom := Linha;
+      SRect.Right := Coluna;
+      Selection := SRect;
+    end;
+  end;
+end;
+
+procedure TStringGridObject.SetOnBeginEdit(const Value: TBeginEditEvent);
+begin
+  FOnBeginEdit := Value;
+end;
+
+procedure TStringGridObject.SetOnEditEvent(const Value: TEditEvent);
+begin
+  FOnEditEvent := Value;
+end;
+
+procedure TStringGridObject.SetOnEndEdit(const Value: TEndEditEvent);
+begin
+  FOnEndEdit := Value;
+end;
+
+procedure TStringGridObject.SetOnValidateEdit(const Value: TValidateEditEvent);
+begin
+  FOnValidateEdit := Value;
+end;
+
+{ TEditor }
+
+constructor TStringEditor.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Self.OnExit := EditorExit;
+  ParentCtl3D := false;
+  Ctl3D := false;
+  TabStop := false;
+  BorderStyle := bsNone;
+  DoubleBuffered := false;
+end;
+
+procedure TStringEditor.EditorExit(Sender: TObject);
+begin
+  Self.Update;
+end;
+
+function TStringEditor.ForcarUpdate: Boolean;
+begin
+  Result := True;
+  if Assigned(Self.Owner) then
+  begin
+    if TStringGridObject(Self.Owner).EditorMode then
+    begin
+      Result := Update;
+    end;
+  end;
+end;
+
+procedure TStringEditor.KeyDown(var Key: Word; Shift: TShiftState);
+begin
+  case Key of
+    VK_UP, VK_DOWN, VK_PRIOR, VK_NEXT, VK_ESCAPE, VK_TAB:
+
+      if not UpDateObject then
+        TStringGridObject(Self.Owner).CancelarEdicao;
+  end;
+  inherited;
+end;
+
+procedure TStringEditor.KeyPress(var Key: Char);
+begin
+
+  if (Key = #13) then
+  begin
+    if UpDateObject then
+    begin
+      inherited;
+      TStringGridObject(Self.Owner).EditorMode := false;
+    end
+    else
+      TStringGridObject(Self.Owner).CancelarEdicao;
+
+  end
+  else if Key = #27 then
+    TStringGridObject(Self.Owner).CancelarEdicao
+  else if Key = #8 then
+    Self.SelectAll
+  else
+  begin
+    inherited;
+    case TStringGridObject(Self.Owner).Columns.Items
+      [TStringGridObject(Self.Owner).Col].ColType of
+      ctInteger, ctNumeric:
+        begin
+          if not(Key in ['0' .. '9']) then
+            Key := #0;
+        end;
+      ctFloat:
+        begin
+          if not(Key in ['0' .. '9', ',']) then
+            Key := #0;
+        end
+    else
+      inherited;
+      // ctDate: ;
+      // ctString: ;
+      // ctBoolean: ;
+    end;
+  end;
+
+end;
+
+function TStringEditor.Update: Boolean;
+begin
+  Result := false;
+  if Assigned(Self.Owner) then
+  begin
+    if TStringGridObject(Self.Owner).EditorMode then
+    begin
+      if TStringGridObject(Self.Owner).Cells[TStringGridObject(Self.Owner).Col,
+        TStringGridObject(Self.Owner).Row] <> TStringGridObject(Self.Owner).FOldValue
+      then
+      begin
+        Result := UpDateObject;
+      end;
+    end;
+  end;
+end;
+
+procedure TStringEditor.UpdateContents;
+begin
+  if TStringGridObject(Self.Grid).FOldValue = '?' then
+    TStringGridObject(Self.Grid).FOldValue := TStringGridObject(Self.Grid)
+      .Cells[TStringGridObject(Self.Grid).Col,
+      TStringGridObject(Self.Grid).Row];
+  inherited;
+end;
+
+function TStringEditor.UpDateObject: Boolean;
+var
+  CanUpDate: Boolean;
+  valorCampo: string;
+begin
+  CanUpDate := True;
+
+  valorCampo := Self.Text;
+
+  if Assigned(TStringGridObject(Self.Owner).OnEditEvent) then
+  begin
+    TStringGridObject(Self.Owner).OnEditEvent(TStringGridObject(Self.Owner),
+      TStringGridObject(Self.Owner).Col, TStringGridObject(Self.Owner).Row,
+      valorCampo);
+
+    Self.Text := valorCampo
+  end;
+
+  if Assigned(TStringGridObject(Self.Owner).OnValidateEdit) then
+    TStringGridObject(Self.Owner).OnValidateEdit(TStringGridObject(Self.Owner),
+      TStringGridObject(Self.Owner).Col, TStringGridObject(Self.Owner).Row,
+      Self.Text, CanUpDate);
+
+  if CanUpDate then
+    TStringGridObject(Self.Owner).UpdateObjectRow(TStringGridObject(Self.Owner)
+      .Col, TStringGridObject(Self.Owner).Row, Self.Text);
+
+  Result := CanUpDate;
+end;
+
+{ TColunmsEditor }
+
+procedure TColunmsEditor.Edit;
+begin
+  inherited;
+
+end;
+
+procedure TColunmsEditor.ExecuteVerb(Index: integer);
+begin
+  inherited;
+   TStringGridObject(Self.Component).LoadColumns;
+end;
+
+function TColunmsEditor.GetVerb(Index: integer): string;
+begin
+   Result := 'Create Colunms';
+end;
+
+function TColunmsEditor.GetVerbCount: integer;
+begin
+   Result := 1
+end;
+
+{ TColumnDetail }
+
+procedure TColumnDetail.Assign(Source: TPersistent);
+begin
+  inherited Assign(Source);
+  FColTitle := TColumnDetail(Source).FColTitle;
+  FColumn.Assign(TColumnDetail(Source).Column);
+end;
+
+constructor TColumnDetail.Create(Collection: TCollection);
+begin
+  inherited Create(Collection);
+
+  Self.FSize := 100;
+  Self.FColType := ctString;
+  Self.FCanSelect := True;
+  Self.ColTitle := 'column_'+ Self.Index.ToString ;
+  Self.FCellsAlignment := taLeftJustify;
+end;
+
+destructor TColumnDetail.Destroy;
+begin
+  FColumn.Free;
+  inherited;
+end;
+
+function TColumnDetail.GetDisplayName: string;
+begin
+   Result := FColTitle;
+end;
+
+procedure TColumnDetail.SetCanSelect(const Value: Boolean);
+begin
+  FCanSelect := Value;
+end;
+
+procedure TColumnDetail.SetCellsAlignment(const Value: TAlignment);
+begin
+  FCellsAlignment := Value;
+end;
+
+procedure TColumnDetail.SetColTitle(const Value: String);
+begin
+  FColTitle := Value;
+  Changed(True);
+end;
+
+procedure TColumnDetail.SetColType(const Value: TCellsType);
+begin
+  FColType := Value;
+end;
+
+procedure TColumnDetail.SetDecimal(const Value: integer);
+begin
+  FDecimal := Value;
+end;
+
+procedure TColumnDetail.SetFieldName(const Value: string);
+begin
+  FFieldName := Value;
+end;
+
+procedure TColumnDetail.SetIndex(Value: Integer);
+begin
+  inherited SetIndex(Value);
+end;
+
+procedure TColumnDetail.SetisRequered(const Value: Boolean);
+begin
+  FisRequered := Value;
+end;
+
+procedure TColumnDetail.SetMaxLen(const Value: integer);
+begin
+  FMaxLen := Value;
+end;
+
+procedure TColumnDetail.SetSize(const Value: Integer);
+begin
+  FSize := Value;
+  Changed(True);
+end;
+
+{ TColumn }
+
+function TColumn.Add: TColumnDetail;
+begin
+  Result := TColumnDetail(inherited Add);
+end;
+
+constructor TColumn.Create(AOwner: TComponent);
+begin
+  inherited Create (TColumnDetail);
+  FComp := AOwner;
+end;
+
+function TColumn.GetItem(Index: Integer): TColumnDetail;
+begin
+  Result := TColumnDetail(inherited GetItem(Index));
+end;
+
+function TColumn.GetOwner: TPersistent;
+begin
+   Result := FComp;
+end;
+
+procedure TColumn.SetItem(Index: Integer; Value: TColumnDetail);
+begin
+   inherited SetItem(Index, Value);
+end;
+
+procedure TColumn.Update(Item: TCollectionItem);
+begin
+  inherited Update(Item);
+    TStringGridObject(FComp).LoadColumns;
+end;
+
+end.

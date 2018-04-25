@@ -1,0 +1,7 @@
+unit Components.Package.StringGridObject.ColumnsEditor;
+
+interface
+
+implementation
+
+end.
