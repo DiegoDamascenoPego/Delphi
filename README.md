@@ -1,6 +1,6 @@
 <div style="text-align:center" markdown="1">
 
-![TSTRINGGRIDOBJECT](Package_Grid.ico) 
+![TSTRINGGRIDOBJECT](image-gri.png) 
 </div>
 
 # TStringGridObject 
@@ -26,7 +26,7 @@ e preencher as informações na células da **GRID**.
 
 <div style="text-align:center" markdown="1">
 
-![TSTRINGGRIDOBJECT](Package_CEP.ico) 
+![TSTRINGGRIDOBJECT](image_cep.png) 
 </div>
 
 # TEDITCEP 
