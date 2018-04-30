@@ -1,4 +1,4 @@
-<div style="text-align:center" markdown="1">
+<div style="text-align:center" markdown="2">
 
 ![TSTRINGGRIDOBJECT](image_grid_2.png) 
 </div>
@@ -23,6 +23,9 @@ e preencher as informações na células da **GRID**.
 >* **TValidateEditEvent**: É o evento que aplica uma determina validação antes de permitir que o objeto seja alterado.
 >* **TEditEvent**: É o Evento que pode ser utilizado durante a alteração do objeto
 >* **TEndEditEvent**: É o evento disparado quando a alteração do objeto foi finalizada
+
+
+______
 
 <div style="text-align:center" markdown="1">
 
