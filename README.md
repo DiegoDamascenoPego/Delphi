@@ -1,6 +1,6 @@
 <div style="text-align:center" markdown="1">
 
-![TSTRINGGRIDOBJECT](image-gri.png) 
+![TSTRINGGRIDOBJECT](image_grid.png) 
 </div>
 
 # TStringGridObject 
