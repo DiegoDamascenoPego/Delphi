@@ -132,7 +132,7 @@ type
     procedure DefaultAlignmentColums(var lCanvas: TCanvas; ACol, ARow: Integer; ARect: TRect);
     procedure CellsFontColor(var lCanvas: TCanvas; FontColor: Integer; State: TGridDrawState; ARect: TRect; FontColorFocus: Integer = 0);
     procedure CellsImage(var lCanvas: TCanvas; ACol, ARow: Integer; ARect: TRect; Imagem: TGraphic);
-    function SelectRecord(const Value, ColName: string): Boolean;
+    function SelecionaRegistro(const Value, ColName: string): Boolean;
     procedure GridFocus(Linha, Coluna: Integer);
     { Public declarations }
   published
@@ -602,7 +602,7 @@ begin
   end;
 end;
 
-function TStringGridObject.SelectRecord(const Value, ColName: string): Boolean;
+function TStringGridObject.SelecionaRegistro(const Value, ColName: string): Boolean;
 var
   I, indiceColuna: Integer;
   bRet: Boolean;

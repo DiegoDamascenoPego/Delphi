@@ -120,11 +120,11 @@ type
     procedure SetGridFocus(Linha, Coluna: Integer);
     procedure AtualizarGrid<T: class>(lista: TObjectList<T>);
     procedure Refresh;
-    function RetornaListaObjetoGrid<T: class>: TObjectList<T>;
-    function RetornaObjeto<T: class>(ARow: Integer): T; overload;
-    function RetornaObjeto<T: class>: T; overload;
-    procedure CancelarEdicao;
-    function ForcarEdicao: Boolean;
+    function ReturnListObjectGrid<T: class>: TObjectList<T>;
+    function ReturnObject<T: class>(ARow: Integer): T; overload;
+    function ReturnObject<T: class>: T; overload;
+    procedure CancelEdit;
+    function ForceEdit: Boolean;
     procedure UpdateObjectRow(ACol, ARow: Longint; const Value: string);
     procedure AlignmentCenter(lCanvas: TCanvas; ACol, ARow: Integer; ARect: TRect);
     procedure AlignmentRight(lCanvas: TCanvas; ACol, ARow: Integer; ARect: TRect);
@@ -258,7 +258,7 @@ begin
 
 end;
 
-procedure TStringGridObject.CancelarEdicao;
+procedure TStringGridObject.CancelEdit;
 begin
   if Self.EditorMode then
   begin
@@ -431,14 +431,14 @@ begin
     inherited DrawCell(ACol, ARow, ARect, AState);
 end;
 
-function TStringGridObject.ForcarEdicao: Boolean;
+function TStringGridObject.ForceEdit: Boolean;
 begin
   if Assigned(Self.InplaceEditor) then
   begin
     Result := TStringEditor(Self.InplaceEditor).ForcarUpdate;
 
     if not Result then
-      Self.CancelarEdicao;
+      Self.CancelEdit;
   end
   else
   begin
@@ -495,7 +495,7 @@ begin
   end;
 end;
 
-function TStringGridObject.RetornaListaObjetoGrid<T>: TObjectList<T>;
+function TStringGridObject.ReturnListObjectGrid<T>: TObjectList<T>;
 var
   I: Integer;
 begin
@@ -507,7 +507,7 @@ begin
   end;
 end;
 
-function TStringGridObject.RetornaObjeto<T>: T;
+function TStringGridObject.ReturnObject<T>: T;
 begin
   if Self.Objects[0, Self.Row] is T then
     Result := Self.Objects[0, Self.Row] AS T
@@ -550,7 +550,7 @@ begin
   LoadColumns;
 end;
 
-function TStringGridObject.RetornaObjeto<T>(ARow: Integer): T;
+function TStringGridObject.ReturnObject<T>(ARow: Integer): T;
 begin
   if Self.Objects[0, ARow] is T then
     Result := Self.Objects[0, ARow] AS T
@@ -860,6 +860,7 @@ begin
     begin
       Detail := TColumnDetail.Create(Columns);
       Detail.FColTitle := prop.Name;
+      Detail.FFieldName := prop.Name;
       Detail.FSize := 150;
       Detail.Changed(True);
     end;

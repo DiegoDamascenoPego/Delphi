@@ -1,0 +1,198 @@
+﻿unit Components.Package.EditTextCep.uEditCep;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, Vcl.Controls, Vcl.StdCtrls, Vcl.Mask,
+  Vcl.ExtCtrls, Vcl.Graphics, Winapi.Messages, Winapi.Windows;
+
+type
+  TAlertError = (tCepInvalid, tCepNotFound);
+
+type
+  TEditCep = class(TButtonedEdit)
+  private
+    FEdtLogradouro: TCustomEdit;
+    FEdtNumero: TCustomEdit;
+    FEdtComplemento: TCustomEdit;
+    FEdtCidade: TCustomEdit;
+    FEdtBairro: TCustomEdit;
+    procedure SetEdtLogradouro(const Value: TCustomEdit);
+    procedure SetEdtBairro(const Value: TCustomEdit);
+    procedure SetEdtCidade(const Value: TCustomEdit);
+    procedure SetEdtComplemento(const Value: TCustomEdit);
+    procedure SetEdtNumero(const Value: TCustomEdit);
+    procedure SetValueEdit(const Component: TCustomEdit; const Value: string);
+    { Private declarations }
+  protected
+    procedure ButtonClick(Sender: TObject); virtual;
+    procedure KeyPress(var Key: Char); override;
+    { Protected declarations }
+  public
+    constructor Create(AOwner: TComponent); override;
+    { Public declarations }
+  published
+    property EdtLogradouro: TCustomEdit read FEdtLogradouro write SetEdtLogradouro;
+    property EdtNumero: TCustomEdit read FEdtNumero write SetEdtNumero;
+    property EdtBairro: TCustomEdit read FEdtBairro write SetEdtBairro;
+    property EdtComplemento: TCustomEdit read FEdtComplemento write SetEdtComplemento;
+    property EdtCidade: TCustomEdit read FEdtCidade write SetEdtCidade;
+    { Published declarations }
+  end;
+
+procedure Register;
+
+implementation
+
+uses
+  Components.Package.EditTextCep.uRestConnect,
+  Components.Package.EditTextCep.uEnd, REST.Json;
+
+procedure Register;
+begin
+  RegisterComponents('componentes', [TEditCep]);
+end;
+
+{ TEditCep }
+
+procedure TEditCep.ButtonClick(Sender: TObject);
+var
+  client: TRest;
+  procedure AlertErro(error: TAlertError);
+    procedure Alert(Msg: string);
+    begin
+      with TCustomHint.Create(Self) do
+      begin
+        Title := Msg;
+        Delay := 0;
+        HideAfter := 2000;
+        Style := bhsBalloon;
+        Font.Size := 20;
+        ShowHint(Self.ClientToScreen(Point(0, 0)));
+        Self.SetFocus;
+      end;
+    end;
+  begin
+    case error of
+      tCepInvalid:
+      begin
+        Alert('Cep com formato inválido');
+      end;
+      tCepNotFound:
+      begin
+        Alert('Cep não encontrado.');
+      end;
+    end;
+  end;
+  procedure ClearEdits;
+  begin
+    SetValueEdit(EdtLogradouro, '');
+    SetValueEdit(EdtBairro, '');
+    SetValueEdit(EdtComplemento, '');
+    SetValueEdit(EdtCidade, '');
+    SetValueEdit(EdtNumero, '');
+  end;
+begin
+  client := TRest.Create;
+  try
+    with client.Result(Self.Text) do
+    begin
+      case StatusCode of
+        200:
+          begin
+            if Pos('erro', JSONText) > 0 then
+            begin
+              ClearEdits;
+              AlertErro(tCepNotFound);
+            end
+            else
+            begin
+              with TJson.JsonToObject<TEndereco>(JSONText) do
+              begin
+                if Assigned(Self.EdtLogradouro) then
+                begin
+                  SetValueEdit(EdtLogradouro, Logradouro);
+                  SetValueEdit(EdtBairro, Bairro);
+                  SetValueEdit(EdtComplemento, Complemento);
+                  SetValueEdit(EdtCidade, Localidade);
+                  if Assigned(Self.EdtNumero) then
+                    EdtNumero.SetFocus;
+                end;
+              end;
+            end;
+
+          end;
+        404:
+          begin
+            ClearEdits;
+            AlertErro(tCepInvalid);
+          end;
+      end;
+    end;
+
+  finally
+    client.Free;
+  end;
+end;
+
+constructor TEditCep.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  Self.Alignment := taLeftJustify;
+  Self.OnRightButtonClick := ButtonClick;
+  Self.RightButton.Visible := True;
+end;
+
+procedure TEditCep.KeyPress(var Key: Char);
+var
+  value : Char;
+  indexImage : integer;
+begin
+  if Key = #13 then
+  begin
+    if Length(Self.Text) >= 8 then
+    begin
+      Self.OnRightButtonClick(Self);
+//      ButtonClick(Self);
+    end;
+
+  end
+  else if ((key in ['0'..'9'] = false) and (word(key) <> vk_back)) then
+  begin
+    key := #0
+  end
+
+end;
+
+procedure TEditCep.SetEdtBairro(const Value: TCustomEdit);
+begin
+  FEdtBairro := Value;
+end;
+
+procedure TEditCep.SetEdtCidade(const Value: TCustomEdit);
+begin
+  FEdtCidade := Value;
+end;
+
+procedure TEditCep.SetEdtComplemento(const Value: TCustomEdit);
+begin
+  FEdtComplemento := Value;
+end;
+
+procedure TEditCep.SetEdtLogradouro(const Value: TCustomEdit);
+begin
+  FEdtLogradouro := Value;
+end;
+
+procedure TEditCep.SetEdtNumero(const Value: TCustomEdit);
+begin
+  FEdtNumero := Value;
+end;
+
+procedure TEditCep.SetValueEdit(const Component: TCustomEdit; const Value: string);
+begin
+  if Assigned(Component) then
+      Component.Text := Value;
+end;
+
+end.

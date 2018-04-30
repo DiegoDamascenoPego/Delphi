@@ -114,11 +114,11 @@ type
     { Protected declarations }
   public
     FOldValue: string;
-    FEditing: Boolean;
+    FEditando: Boolean;
     constructor Create(AOwner: TComponent); Override;
     destructor Destroy; override;
     procedure SetGridFocus(Linha, Coluna: Integer);
-    procedure UpdateGrid<T: class>(lista: TObjectList<T>);
+    procedure AtualizarGrid<T: class>(lista: TObjectList<T>);
     procedure Refresh;
     function ReturnListObjectGrid<T: class>: TObjectList<T>;
     function ReturnObject<T: class>(ARow: Integer): T; overload;
@@ -132,7 +132,7 @@ type
     procedure DefaultAlignmentColums(var lCanvas: TCanvas; ACol, ARow: Integer; ARect: TRect);
     procedure CellsFontColor(var lCanvas: TCanvas; FontColor: Integer; State: TGridDrawState; ARect: TRect; FontColorFocus: Integer = 0);
     procedure CellsImage(var lCanvas: TCanvas; ACol, ARow: Integer; ARect: TRect; Imagem: TGraphic);
-    function SelectRecord(const Value, ColName: string): Boolean;
+    function SelecionaRegistro(const Value, ColName: string): Boolean;
     procedure GridFocus(Linha, Coluna: Integer);
     { Public declarations }
   published
@@ -220,7 +220,7 @@ begin
   lCanvas.TextRect(ARect, ARect.Right - 2 - Canvas.TextWidth(Cells[ACol, ARow]), ARect.Top + 2, Cells[ACol, ARow]);
 end;
 
-procedure TStringGridObject.UpdateGrid<T>(lista: TObjectList<T>);
+procedure TStringGridObject.AtualizarGrid<T>(lista: TObjectList<T>);
 var
   registro: TObject;
   Index, I: Integer;
@@ -602,7 +602,7 @@ begin
   end;
 end;
 
-function TStringGridObject.SelectRecord(const Value, ColName: string): Boolean;
+function TStringGridObject.SelecionaRegistro(const Value, ColName: string): Boolean;
 var
   I, indiceColuna: Integer;
   bRet: Boolean;

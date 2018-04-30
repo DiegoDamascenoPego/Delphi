@@ -91,8 +91,8 @@ type
     FOnEditEvent: TEditEvent;
     FColumns: TColumn;
     FColumnObject: string;
-    function ReturnValue(Value: TValue; tipo: TCellsType): string; overload;
-    function ReturnValue(Value: String; tipo: TCellsType): TValue; overload;
+    function RetornaValor(Value: TValue; tipo: TCellsType): string; overload;
+    function RetornaValor(Value: String; tipo: TCellsType): TValue; overload;
     procedure SetOnBeginEdit(const Value: TBeginEditEvent);
     procedure SetOnValidateEdit(const Value: TValidateEditEvent);
     procedure SetOnEndEdit(const Value: TEndEditEvent);
@@ -114,17 +114,17 @@ type
     { Protected declarations }
   public
     FOldValue: string;
-    FEditing: Boolean;
+    FEditando: Boolean;
     constructor Create(AOwner: TComponent); Override;
     destructor Destroy; override;
     procedure SetGridFocus(Linha, Coluna: Integer);
-    procedure UpdateGrid<T: class>(lista: TObjectList<T>);
+    procedure AtualizarGrid<T: class>(lista: TObjectList<T>);
     procedure Refresh;
     function ReturnListObjectGrid<T: class>: TObjectList<T>;
     function ReturnObject<T: class>(ARow: Integer): T; overload;
     function ReturnObject<T: class>: T; overload;
-    procedure CancelEdit;
-    function ForceEdit: Boolean;
+    procedure CancelarEdicao;
+    function ForcarEdicao: Boolean;
     procedure UpdateObjectRow(ACol, ARow: Longint; const Value: string);
     procedure AlignmentCenter(lCanvas: TCanvas; ACol, ARow: Integer; ARect: TRect);
     procedure AlignmentRight(lCanvas: TCanvas; ACol, ARow: Integer; ARect: TRect);
@@ -132,7 +132,7 @@ type
     procedure DefaultAlignmentColums(var lCanvas: TCanvas; ACol, ARow: Integer; ARect: TRect);
     procedure CellsFontColor(var lCanvas: TCanvas; FontColor: Integer; State: TGridDrawState; ARect: TRect; FontColorFocus: Integer = 0);
     procedure CellsImage(var lCanvas: TCanvas; ACol, ARow: Integer; ARect: TRect; Imagem: TGraphic);
-    function SelectRecord(const Value, ColName: string): Boolean;
+    function SelecionaRegistro(const Value, ColName: string): Boolean;
     procedure GridFocus(Linha, Coluna: Integer);
     { Public declarations }
   published
@@ -220,7 +220,7 @@ begin
   lCanvas.TextRect(ARect, ARect.Right - 2 - Canvas.TextWidth(Cells[ACol, ARow]), ARect.Top + 2, Cells[ACol, ARow]);
 end;
 
-procedure TStringGridObject.UpdateGrid<T>(lista: TObjectList<T>);
+procedure TStringGridObject.AtualizarGrid<T>(lista: TObjectList<T>);
 var
   registro: TObject;
   Index, I: Integer;
@@ -243,7 +243,7 @@ begin
         begin
           try
             PropRtti := TipoRtti.GetProperty(Columns.Items[I].FieldName);
-            Self.Cells[I, index] := ReturnValue(PropRtti.GetValue(registro), Columns.Items[I].ColType);
+            Self.Cells[I, index] := RetornaValor(PropRtti.GetValue(registro), Columns.Items[I].ColType);
           except
             // campo não encontrado
           end;
@@ -258,7 +258,7 @@ begin
 
 end;
 
-procedure TStringGridObject.CancelEdit;
+procedure TStringGridObject.CancelarEdicao;
 begin
   if Self.EditorMode then
   begin
@@ -431,14 +431,14 @@ begin
     inherited DrawCell(ACol, ARow, ARect, AState);
 end;
 
-function TStringGridObject.ForceEdit: Boolean;
+function TStringGridObject.ForcarEdicao: Boolean;
 begin
   if Assigned(Self.InplaceEditor) then
   begin
     Result := TStringEditor(Self.InplaceEditor).ForcarUpdate;
 
     if not Result then
-      Self.CancelEdit;
+      Self.CancelarEdicao;
   end
   else
   begin
@@ -487,7 +487,7 @@ begin
     begin
       try
         PropRtti := TipoRtti.GetProperty(Columns.Items[X].FieldName);
-        Self.SetEditText(X, I, ReturnValue(PropRtti.GetValue(Self.Objects[0, I]), Columns.Items[X].ColType));
+        Self.SetEditText(X, I, RetornaValor(PropRtti.GetValue(Self.Objects[0, I]), Columns.Items[X].ColType));
       except
         // campo não encontrado
       end;
@@ -558,7 +558,7 @@ begin
     Result := nil;
 end;
 
-function TStringGridObject.ReturnValue(Value: String; tipo: TCellsType): TValue;
+function TStringGridObject.RetornaValor(Value: String; tipo: TCellsType): TValue;
 begin
   try
     case tipo of
@@ -580,7 +580,7 @@ begin
   end;
 end;
 
-function TStringGridObject.ReturnValue(Value: TValue; tipo: TCellsType): string;
+function TStringGridObject.RetornaValor(Value: TValue; tipo: TCellsType): string;
 begin
   try
     case tipo of
@@ -602,7 +602,7 @@ begin
   end;
 end;
 
-function TStringGridObject.SelectRecord(const Value, ColName: string): Boolean;
+function TStringGridObject.SelecionaRegistro(const Value, ColName: string): Boolean;
 var
   I, indiceColuna: Integer;
   bRet: Boolean;
@@ -661,7 +661,7 @@ begin
   try
     TipoRtti := Ctx.GetType(registro.ClassInfo);
     PropRtti := TipoRtti.GetProperty(Self.Columns.Items[ACol].FieldName);
-    Valor := ReturnValue(Value, Self.Columns.Items[ACol].ColType);
+    Valor := RetornaValor(Value, Self.Columns.Items[ACol].ColType);
     PropRtti.SetValue(registro, Valor);
   except
     on E: Exception do
@@ -677,7 +677,7 @@ begin
       end;
     end;
   end;
-  Cells[ACol, ARow] := ReturnValue(Valor, Self.Columns.Items[ACol].ColType);
+  Cells[ACol, ARow] := RetornaValor(Valor, Self.Columns.Items[ACol].ColType);
 
   if Assigned(Self.OnEndEdit) then
     Self.OnEndEdit(Self, ACol, ARow);

@@ -1,0 +1,75 @@
+unit Components.Package.EditTextCep.uRestConnect;
+
+interface
+uses
+    REST.Client, REST.Json, JSON, Components.Package.EditTextCep.uEnd;
+
+type
+    TRest = class
+    private
+      FClient   : TRESTClient;
+      FRequest  : TRESTRequest;
+      FResponse : TRESTResponse;
+    public
+      constructor Create;
+      destructor Destroy;
+      function Result(Const Recurso: String; var Endereco: TEndereco): String;
+    end;
+
+implementation
+
+uses
+  IPPeerClient, System.SysUtils;
+
+{ TRest }
+
+procedure RetornaNumeros(value: string);
+var
+  I: Integer;
+begin
+  for I := 1 To Length(value) do
+       if value [I] In ['0'..'9'] Then
+            Result := Result + value [I];
+end;
+end;
+
+constructor TRest.Create;
+begin
+  Self.FClient   := TRESTClient.Create(nil);
+  Self.FRequest  := TRESTRequest.Create(nil);
+  Self.FResponse := TRESTResponse.Create(nil);
+
+  Self.FClient.BaseURL := 'https://viacep.com.br/ws/';;
+
+  Self.FClient.AutoCreateParams  := True;
+  Self.FRequest.AutoCreateParams := True;
+  Self.FRequest.HandleRedirects  := True;
+  Self.FRequest.Client           := Self.FClient;
+  Self.FRequest.Response         := Self.FResponse;
+end;
+
+destructor TRest.Destroy;
+begin
+  Self.FClient.Free;
+  Self.FRequest.Free;
+  Self.FResponse.Free;
+end;
+
+function TRest.Result(Const Recurso: String; var Endereco: TEndereco): String;
+var
+     I: Integer;
+begin
+  if Assigned(Endereco) then
+  begin
+    try
+      Self.FRequest.Resource := Recurso + '/json/';;
+      Self.FRequest.Execute;
+      Endereco :=  TJson.JsonToObject<TEndereco>(Self.FResponse.JSONText);
+    except
+      raise Exception.Create('Conversão não realizada');
+    end;
+  end;
+
+end;
+
+end.

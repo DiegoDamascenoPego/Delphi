@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{5345FCCF-FBC3-4B00-9402-30C73868A139}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="TStringGridObject.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\TEditCep\TBtnCep.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="TStringGridObject">
+        <MSBuild Projects="TStringGridObject.dproj"/>
+    </Target>
+    <Target Name="TStringGridObject:Clean">
+        <MSBuild Projects="TStringGridObject.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TStringGridObject:Make">
+        <MSBuild Projects="TStringGridObject.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="TBtnCep">
+        <MSBuild Projects="..\TEditCep\TBtnCep.dproj"/>
+    </Target>
+    <Target Name="TBtnCep:Clean">
+        <MSBuild Projects="..\TEditCep\TBtnCep.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="TBtnCep:Make">
+        <MSBuild Projects="..\TEditCep\TBtnCep.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="TStringGridObject;TBtnCep"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="TStringGridObject:Clean;TBtnCep:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="TStringGridObject:Make;TBtnCep:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

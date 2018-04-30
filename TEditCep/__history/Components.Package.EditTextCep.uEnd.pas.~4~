@@ -1,0 +1,96 @@
+unit Components.Package.EditTextCep.uEnd;
+
+interface
+type
+TEndereco = class
+private
+    FIbge: Integer;
+    FBairro: string;
+    FUF: string;
+    FCep: string;
+    FNumero: string;
+    FComplemento: string;
+    FCidade: string;
+    FLogradouro: string;
+    procedure SetBairro(const Value: string);
+    procedure SetCep(const Value: string);
+    procedure SetCidade(const Value: string);
+    procedure SetComplemento(const Value: string);
+    procedure SetIbge(const Value: Integer);
+    procedure SetNumero(const Value: string);
+    procedure SetRua(const Value: string);
+    procedure SetUF(const Value: string);
+  { private declarations }
+protected
+  { protected declarations }
+public
+  function ToString: string;
+  { public declarations }
+published
+  property Cep: string read FCep write SetCep;
+  property Logradouro: string read FLogradouro write SetLogradouro;
+  property Bairro: string read FBairro write SetBairro;
+  property Numero: string read FNumero write SetNumero;
+  property Cidade: string read FCidade write SetCidade;
+  property UF: string read FUF write SetUF;
+  property Complemento: string read FComplemento write SetComplemento;
+  property Ibge: Integer read FIbge write SetIbge;
+  { published declarations }
+end;
+implementation
+
+uses
+  Components.Package.EditTextCep.uEditCep;
+
+{ TEndereco }
+
+procedure TEndereco.SetBairro(const Value: string);
+begin
+  FBairro := Value;
+end;
+
+procedure TEndereco.SetCep(const Value: string);
+begin
+  FCep := Value;
+end;
+
+procedure TEndereco.SetCidade(const Value: string);
+begin
+  FCidade := Value;
+end;
+
+procedure TEndereco.SetComplemento(const Value: string);
+begin
+  FComplemento := Value;
+end;
+
+procedure TEndereco.SetIbge(const Value: Integer);
+begin
+  FIbge := Value;
+end;
+
+procedure TEndereco.SetNumero(const Value: string);
+begin
+  FNumero := Value;
+end;
+
+procedure TEndereco.SetRua(const Value: string);
+begin
+  FRua := Value;
+end;
+
+procedure TEndereco.SetUF(const Value: string);
+begin
+  FUF := Value;
+end;
+
+function TEndereco.ToString: string;
+begin
+  Result := Self.Rua + ', ' +
+            Self.Numero + ' - ' +
+            Self.Bairro + ', ' +
+            Self.Cidade + ' - ' +
+            Self.UF + ' ' ;
+end;
+
+end.

@@ -1,0 +1,39 @@
+unit EditCep;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, Vcl.Controls, Vcl.StdCtrls;
+
+type
+  TEditCep = class(TEdit)
+  private
+    FButton: TButton;
+    { Private declarations }
+  protected
+    { Protected declarations }
+  public
+    constructor Create(AOwner: TComponent); override;
+    { Public declarations }
+  published
+    { Published declarations }
+  end;
+
+procedure Register;
+
+implementation
+
+procedure Register;
+begin
+  RegisterComponents('componentes', [TEditCep]);
+end;
+
+{ TEditCep }
+
+constructor TEditCep.Create(AOwner: TComponent);
+begin
+  inherited;
+
+end;
+
+end.

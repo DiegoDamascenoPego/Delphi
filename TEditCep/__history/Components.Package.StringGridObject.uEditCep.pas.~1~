@@ -1,0 +1,55 @@
+unit Components.Package.StringGridObject.EditCep;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, Vcl.Controls, Vcl.StdCtrls;
+
+type
+  TEditCep = class(TEdit)
+  private
+    FButton: TButton;
+    { Private declarations }
+  protected
+    procedure ButtonClick (Sender: TObject); virtual;
+    { Protected declarations }
+  public
+    constructor Create(AOwner: TComponent); override;
+    { Public declarations }
+  published
+    { Published declarations }
+  end;
+
+procedure Register;
+
+implementation
+
+procedure Register;
+begin
+  RegisterComponents('componentes', [TEditCep]);
+end;
+
+{ TEditCep }
+
+procedure TEditCep.ButtonClick(Sender: TObject);
+begin
+  Self.Caption := 'texte';
+end;
+
+constructor TEditCep.Create(AOwner: TComponent);
+begin
+  inherited;
+
+  Self.FButton := TButton.Create(Self);
+  Self.FButton.Width := 15;
+  Self.FButton.Height := 17;
+//  if csDesigning in ComponentState then
+//   Self.FButton.Visible := True
+//  else Self.FButton.Visible := False;
+
+  Self.FButton.Parent := Self;
+  Self.FButton.OnClick := ButtonClick;
+  Self.FButton.Cursor := crArrow;
+end;
+
+end.

@@ -73,7 +73,7 @@ begin
     VK_UP, VK_DOWN, VK_PRIOR, VK_NEXT, VK_ESCAPE, VK_TAB:
 
       if not UpDateObject then
-        TStringGridObject(Self.Owner).CancelEdit;
+        TStringGridObject(Self.Owner).CancelarEdicao;
   end;
 
   inherited;
@@ -90,11 +90,11 @@ begin
       TStringGridObject(Self.Owner).EditorMode := false;
     end
     else
-      TStringGridObject(Self.Owner).CancelEdit;
+      TStringGridObject(Self.Owner).CancelarEdicao;
 
   end
   else if Key = #27 then
-    TStringGridObject(Self.Owner).CancelEdit
+    TStringGridObject(Self.Owner).CancelarEdicao
   else if Key = #8 then
     Self.SelectAll
   else
