@@ -26,7 +26,7 @@ e preencher as informações na células da **GRID**.
 
 <div style="text-align:center" markdown="1">
 
-![TSTRINGGRIDOBJECT](image_cep.png) 
+![TSTRINGGRIDOBJECT](image_cep_2.png) 
 </div>
 
 # TEDITCEP 
