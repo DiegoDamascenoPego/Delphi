@@ -33,3 +33,9 @@ ______
 </div>
 
 # TEDITCEP 
+
+Componente responsável por consumir a API **VIACEP**
+
+Componente é baseado no **TButtonedEdit** com property especificas para os campos de endereços retornadas pela API.
+
+
