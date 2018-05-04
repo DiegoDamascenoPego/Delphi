@@ -5,8 +5,7 @@ interface
 uses
   System.SysUtils, System.Classes, Vcl.Controls,
   System.Generics.Collections, System.Rtti, System.Types,
-  Vcl.Grids, Vcl.StdCtrls, Vcl.Graphics, DesignEditors, DesignIntf,
-  Components.Package.StringGridObject.IColumnsGen;
+  Vcl.Grids, Vcl.StdCtrls, Vcl.Graphics, Components.Package.StringGridObject.IColumnsGen;
 
 type
   TBeginEditEvent = procedure(Sender: TObject; ACol, ARow: Longint; var CanEdit: Boolean) of object;
@@ -191,14 +190,12 @@ implementation
 
 uses
   Winapi.Messages, Winapi.Windows, Vcl.Dialogs, Vcl.Forms,
-  ColnEdit, Components.Package.StringGridObject.uEditor,
-  Components.Package.StringGridObject.uColumnsEditor,
+  Components.Package.StringGridObject.uEditor,
   Components.Package.Utils.uObject;
 
 procedure Register;
 begin
   RegisterComponents('Componentes', [TStringGridObject]);
-  RegisterComponentEditor(TStringGridObject, TColunmsEditor);
 end;
 
 { TDados }

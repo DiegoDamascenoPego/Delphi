@@ -3,7 +3,7 @@ unit Components.Package.StringGridObject.uColumnsEditor;
 interface
 
 uses
-  DesignEditors, DesignIntf, ColEdit;
+  DesignEditors, ColnEdit, ColEdit, DesignIntf;
 
 type
   TColunmsEditor = class(TComponentEditor)
@@ -12,15 +12,21 @@ type
     procedure ExecuteVerb(Index: Integer); override;
   end;
 
+procedure Register;
+
 implementation
 
 uses
-  System.Classes, System.Rtti, ColnEdit,
+  System.Classes, System.Rtti,
   Components.Package.StringGridObject.IColumnsGen,
   Components.Package.Utils.uObject,
   Components.Package.StringGridObject.uStringGrid;
 
 { TColunmsEditor }
+procedure Register;
+begin
+  RegisterComponentEditor(TStringGridObject, TColunmsEditor);
+end;
 procedure TColunmsEditor.ExecuteVerb(Index: Integer);
 var
   context: TRttiContext;
