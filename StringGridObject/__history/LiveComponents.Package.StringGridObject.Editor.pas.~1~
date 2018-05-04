@@ -1,7 +1,0 @@
-unit LiveComponents.Package.StringGridObject.Editor;
-
-interface
-
-implementation
-
-end.
