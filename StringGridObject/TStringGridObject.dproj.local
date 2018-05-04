@@ -2,9 +2,9 @@
 <BorlandProject>
 	<Transactions>
     <Transaction>2017/11/08 00:10:47.000.448,=rtl.dcp</Transaction>
-    <Transaction>2017/11/08 00:11:53.000.218,D:\liveworking\Delphi\StringGridObject\TStringGridObject.dproj=C:\Users\Diego\Documents\Embarcadero\Studio\Projects\Package3.dproj</Transaction>
-    <Transaction>2017/11/08 00:13:23.000.690,=D:\liveworking\Delphi\StringGridObject\StringGridColuns.pas</Transaction>
+    <Transaction>2017/11/08 00:11:53.000.218,C:\Users\Diego\Documents\Embarcadero\Studio\Projects\Package3.dproj=D:\liveworking\Delphi\StringGridObject\TStringGridObject.dproj</Transaction>
     <Transaction>2017/11/08 00:13:23.000.667,=D:\liveworking\Delphi\StringGridObject\StringGrid.pas</Transaction>
+    <Transaction>2017/11/08 00:13:23.000.690,=D:\liveworking\Delphi\StringGridObject\StringGridColuns.pas</Transaction>
     <Transaction>2017/11/08 00:35:11.000.514,=vcl.dcp</Transaction>
     <Transaction>2017/11/08 00:46:00.000.598,=D:\liveworking\Delphi\StringGridObject\VSMStringGridColuns.pas</Transaction>
     <Transaction>2017/11/08 22:38:54.000.191,=bindengine.dcp</Transaction>
@@ -12,40 +12,32 @@
     <Transaction>2017/11/13 21:29:37.000.895,D:\liveworking\Delphi\StringGridObject\StringGridColuns.pas=</Transaction>
     <Transaction>2017/11/13 21:31:29.000.852,=D:\liveworking\Delphi\StringGridObject\StringGridColuns.pas</Transaction>
     <Transaction>2017/11/13 21:31:48.000.384,D:\liveworking\Delphi\StringGridObject\StringGridColuns.pas=</Transaction>
-    <Transaction>2017/11/13 21:39:36.000.123,D:\liveworking\Delphi\StringGridObject\StringGrid.pas=D:\liveworking\Delphi\StringGridObject\StringGridObject.pas</Transaction>
-    <Transaction>2017/11/13 22:03:04.000.584,D:\liveworking\Delphi\StringGridObject\StringGridObject.pas=D:\liveworking\Delphi\StringGridObject\StringGrid.pas</Transaction>
-    <Transaction>2017/11/13 22:04:11.000.747,D:\liveworking\Delphi\StringGridObject\StringGridObject.pas=D:\liveworking\Delphi\StringGridObject\StringGrid.pas</Transaction>
+    <Transaction>2017/11/13 21:39:36.000.123,D:\liveworking\Delphi\StringGridObject\StringGridObject.pas=D:\liveworking\Delphi\StringGridObject\StringGrid.pas</Transaction>
+    <Transaction>2017/11/13 22:03:04.000.584,D:\liveworking\Delphi\StringGridObject\StringGrid.pas=D:\liveworking\Delphi\StringGridObject\StringGridObject.pas</Transaction>
+    <Transaction>2017/11/13 22:04:11.000.747,D:\liveworking\Delphi\StringGridObject\StringGrid.pas=D:\liveworking\Delphi\StringGridObject\StringGridObject.pas</Transaction>
     <Transaction>2017/11/13 22:58:18.000.962,=D:\liveworking\Delphi\StringGridObject\Unit1.pas</Transaction>
-    <Transaction>2017/11/13 23:01:04.000.404,D:\liveworking\Delphi\StringGridObject\uDataObject.pas=D:\liveworking\Delphi\StringGridObject\Unit1.pas</Transaction>
+    <Transaction>2017/11/13 23:01:04.000.404,D:\liveworking\Delphi\StringGridObject\Unit1.pas=D:\liveworking\Delphi\StringGridObject\uDataObject.pas</Transaction>
     <Transaction>2017/11/13 23:48:56.000.889,=D:\liveworking\Delphi\StringGridObject\Unit1.pas</Transaction>
-    <Transaction>2017/11/13 23:51:43.000.189,D:\liveworking\Delphi\StringGridObject\IColumnsGenerate.pas=D:\liveworking\Delphi\StringGridObject\Unit1.pas</Transaction>
-    <Transaction>2017/11/13 23:52:10.000.725,D:\liveworking\Delphi\StringGridObject\IColumnsGen.pas=D:\liveworking\Delphi\StringGridObject\IColumnsGenerate.pas</Transaction>
+    <Transaction>2017/11/13 23:51:43.000.189,D:\liveworking\Delphi\StringGridObject\Unit1.pas=D:\liveworking\Delphi\StringGridObject\IColumnsGenerate.pas</Transaction>
+    <Transaction>2017/11/13 23:52:10.000.725,D:\liveworking\Delphi\StringGridObject\IColumnsGenerate.pas=D:\liveworking\Delphi\StringGridObject\IColumnsGen.pas</Transaction>
     <Transaction>2017/11/14 12:44:31.000.189,=C:\Users\Diego\Documents\Embarcadero\Studio\Projects\UPessoa.pas</Transaction>
     <Transaction>2017/11/16 13:28:57.000.193,=D:\liveworking\Delphi\StringGridObject\Unit1.pas</Transaction>
-    <Transaction>2017/11/16 13:36:27.000.822,D:\liveworking\Delphi\StringGridObject\LiveComponents.Package.StringGridObject.Editor.pas=D:\liveworking\Delphi\StringGridObject\Unit1.pas</Transaction>
-    <Transaction>2017/11/17 12:44:04.000.559,D:\liveworking\Delphi\StringGridObject\LiveComponents.Package.StringGridObject.Editor.pas=D:\liveworking\Delphi\StringGridObject\Components.Package.StringGridObject.Editor.pas</Transaction>
+    <Transaction>2017/11/16 13:36:27.000.822,D:\liveworking\Delphi\StringGridObject\Unit1.pas=D:\liveworking\Delphi\StringGridObject\LiveComponents.Package.StringGridObject.Editor.pas</Transaction>
+    <Transaction>2017/11/17 12:44:04.000.559,D:\liveworking\Delphi\StringGridObject\Components.Package.StringGridObject.Editor.pas=D:\liveworking\Delphi\StringGridObject\LiveComponents.Package.StringGridObject.Editor.pas</Transaction>
     <Transaction>2017/11/17 12:45:04.000.247,=D:\liveworking\Delphi\StringGridObject\Components.Package.StringGridObject.Editor.pas</Transaction>
     <Transaction>2017/11/17 12:54:57.000.791,=D:\liveworking\Delphi\StringGridObject\Unit1.pas</Transaction>
-    <Transaction>2017/11/17 12:55:34.000.304,D:\liveworking\Delphi\StringGridObject\Unit1.pas=D:\liveworking\Delphi\StringGridObject\Components.Package.StringGridObject.ColumnsEditor.pas</Transaction>
+    <Transaction>2017/11/17 12:55:34.000.304,D:\liveworking\Delphi\StringGridObject\Components.Package.StringGridObject.ColumnsEditor.pas=D:\liveworking\Delphi\StringGridObject\Unit1.pas</Transaction>
     <Transaction>2017/11/17 13:08:28.000.786,=dclstd.dcp</Transaction>
-    <Transaction>2017/11/17 13:10:22.000.700,D:\liveworking\Delphi\StringGridObject\Components.Package.StringGridObject.IColumnsGen.pas=D:\liveworking\Delphi\StringGridObject\IColumnsGen.pas</Transaction>
-    <Transaction>2017/11/17 13:15:23.000.359,D:\liveworking\Delphi\StringGridObject\Components.Package.Utils.uObject.pas=D:\liveworking\Delphi\StringGridObject\uDataObject.pas</Transaction>
-    <Transaction>2017/11/17 13:15:35.000.427,D:\liveworking\Delphi\StringGridObject\Components.Package.StringGridObject.uColumnsEditor.pas=D:\liveworking\Delphi\StringGridObject\Components.Package.StringGridObject.ColumnsEditor.pas</Transaction>
-    <Transaction>2017/11/17 13:15:39.000.798,D:\liveworking\Delphi\StringGridObject\Components.Package.StringGridObject.uEditor.pas=D:\liveworking\Delphi\StringGridObject\Components.Package.StringGridObject.Editor.pas</Transaction>
-    <Transaction>2017/11/17 13:18:05.000.555,D:\liveworking\Delphi\StringGridObject\Components.Package.StringGridObject.uStringGrid.pas=D:\liveworking\Delphi\StringGridObject\StringGridObject.pas</Transaction>
+    <Transaction>2017/11/17 13:10:22.000.700,D:\liveworking\Delphi\StringGridObject\IColumnsGen.pas=D:\liveworking\Delphi\StringGridObject\Components.Package.StringGridObject.IColumnsGen.pas</Transaction>
+    <Transaction>2017/11/17 13:15:23.000.359,D:\liveworking\Delphi\StringGridObject\uDataObject.pas=D:\liveworking\Delphi\StringGridObject\Components.Package.Utils.uObject.pas</Transaction>
+    <Transaction>2017/11/17 13:15:35.000.427,D:\liveworking\Delphi\StringGridObject\Components.Package.StringGridObject.ColumnsEditor.pas=D:\liveworking\Delphi\StringGridObject\Components.Package.StringGridObject.uColumnsEditor.pas</Transaction>
+    <Transaction>2017/11/17 13:15:39.000.798,D:\liveworking\Delphi\StringGridObject\Components.Package.StringGridObject.Editor.pas=D:\liveworking\Delphi\StringGridObject\Components.Package.StringGridObject.uEditor.pas</Transaction>
+    <Transaction>2017/11/17 13:18:05.000.555,D:\liveworking\Delphi\StringGridObject\StringGridObject.pas=D:\liveworking\Delphi\StringGridObject\Components.Package.StringGridObject.uStringGrid.pas</Transaction>
   </Transactions>
 	<ProjectSortOrder AutoSort="0" SortType="0">
-    <File Path="C:"/>
-    <File Path="C:\Users"/>
-    <File Path="C:\Users\Diego"/>
-    <File Path="C:\Users\Diego\Documents"/>
-    <File Path="C:\Users\Diego\Documents\Embarcadero"/>
-    <File Path="C:\Users\Diego\Documents\Embarcadero\Studio"/>
-    <File Path="C:\Users\Diego\Documents\Embarcadero\Studio\Projects"/>
-    <File Path="C:\Users\Diego\Documents\Embarcadero\Studio\Projects\UPessoa.pas"/>
+    <File Path="Components.Package.StringGridObject.IColumnsGen.pas"/>
     <File Path="Components.Package.StringGridObject.uColumnsEditor.pas"/>
     <File Path="Components.Package.StringGridObject.uEditor.pas"/>
-    <File Path="Components.Package.StringGridObject.IColumnsGen.pas"/>
     <File Path="Components.Package.StringGridObject.uStringGrid.pas"/>
     <File Path="Components.Package.Utils.uObject.pas"/>
     <File Path="bindengine.dcp"/>

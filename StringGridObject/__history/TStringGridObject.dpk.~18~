@@ -38,6 +38,7 @@ requires
 contains
   Components.Package.StringGridObject.uStringGrid in 'Components.Package.StringGridObject.uStringGrid.pas',
   Components.Package.Utils.uObject in 'Components.Package.Utils.uObject.pas',
+  UPessoa in 'C:\Users\Diego\Documents\Embarcadero\Studio\Projects\UPessoa.pas',
   Components.Package.StringGridObject.uEditor in 'Components.Package.StringGridObject.uEditor.pas',
   Components.Package.StringGridObject.uColumnsEditor in 'Components.Package.StringGridObject.uColumnsEditor.pas',
   Components.Package.StringGridObject.IColumnsGen in 'Components.Package.StringGridObject.IColumnsGen.pas';

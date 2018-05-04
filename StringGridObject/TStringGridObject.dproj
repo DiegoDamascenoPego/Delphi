@@ -148,7 +148,6 @@
         <DCCReference Include="dclstd.dcp"/>
         <DCCReference Include="Components.Package.StringGridObject.uStringGrid.pas"/>
         <DCCReference Include="Components.Package.Utils.uObject.pas"/>
-        <DCCReference Include="C:\Users\Diego\Documents\Embarcadero\Studio\Projects\UPessoa.pas"/>
         <DCCReference Include="Components.Package.StringGridObject.uEditor.pas"/>
         <DCCReference Include="Components.Package.StringGridObject.uColumnsEditor.pas"/>
         <DCCReference Include="Components.Package.StringGridObject.IColumnsGen.pas"/>
